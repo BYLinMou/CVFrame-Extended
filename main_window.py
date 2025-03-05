@@ -26,8 +26,17 @@ class MainWindow(QMainWindow):
         self.video_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.video_label.setMinimumSize(200, 150)
         
+        # 创建用于显示时间和帧数的标签
+        self.info_label = QLabel(self.video_label)
+        self.info_label.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        self.info_label.setStyleSheet("background-color: rgba(0, 0, 0, 0.5); color: white; padding: 5px;")
+        self.info_label.setText("00:00:00 / 00:00:00\nFrame: 0 / 0")
+        
         self.play_btn = QPushButton("Play")
         self.play_btn.clicked.connect(self.toggle_play)
+        
+        self.prev_second_btn = QPushButton("<< 1s")
+        self.prev_second_btn.clicked.connect(self.prev_second)
         
         self.prev_frame_btn = QPushButton("<<")
         self.prev_frame_btn.clicked.connect(self.prev_frame)
@@ -35,10 +44,11 @@ class MainWindow(QMainWindow):
         self.next_frame_btn = QPushButton(">>")
         self.next_frame_btn.clicked.connect(self.next_frame)
         
+        self.next_second_btn = QPushButton("1s >>")
+        self.next_second_btn.clicked.connect(self.next_second)
+        
         self.slider = QSlider(Qt.Horizontal)
         self.slider.sliderMoved.connect(self.set_position)
-        
-        self.time_label = QLabel("00:00:00 / 00:00:00")
         
         # Video list
         self.video_list = QListWidget()
@@ -48,10 +58,11 @@ class MainWindow(QMainWindow):
         
         # Layout
         control_layout = QHBoxLayout()
+        control_layout.addWidget(self.prev_second_btn)
         control_layout.addWidget(self.prev_frame_btn)
         control_layout.addWidget(self.play_btn)
         control_layout.addWidget(self.next_frame_btn)
-        control_layout.addWidget(self.time_label)
+        control_layout.addWidget(self.next_second_btn)
         
         video_layout = QVBoxLayout()
         video_layout.addWidget(self.video_label, 1)
@@ -122,7 +133,7 @@ class MainWindow(QMainWindow):
             self.video_player = VideoPlayer(file_path)
             self.slider.setMaximum(self.video_player.frame_count - 1)
             self.update_frame()
-            self.update_time_label()
+            self.update_info_label()
             self.play_btn.setEnabled(True)
             self.prev_frame_btn.setEnabled(True)
             self.next_frame_btn.setEnabled(True)
@@ -164,24 +175,60 @@ class MainWindow(QMainWindow):
                 self.slider.blockSignals(True)
                 self.slider.setValue(self.video_player.current_frame)
                 self.slider.blockSignals(False)
-                self.update_time_label()
+                self.update_info_label()  # 更新信息标签
+    
+    def update_info_label(self):
+        """更新视频左上角的信息标签"""
+        if self.video_player:
+            current_time = self.video_player.get_current_time()
+            total_time = self.video_player.frame_count / self.video_player.fps
+            current_frame = self.video_player.current_frame
+            total_frames = self.video_player.frame_count
+            self.info_label.setText(
+                f"{self.format_time(current_time)} / {self.format_time(total_time)}\n"
+                f"Frame: {current_frame} / {total_frames}"
+            )
+            # 调整信息标签的位置和大小
+            self.info_label.resize(self.info_label.sizeHint())
+            self.info_label.move(10, 10)  # 放置在视频左上角
     
     def prev_frame(self):
         if self.video_player:
+            # 暂停视频
+            if self.video_player.is_playing:
+                self.toggle_play()
+            # 跳转到前一帧
             self.video_player.prev_frame()
             self.update_frame()
     
     def next_frame(self):
         if self.video_player:
+            # 暂停视频
+            if self.video_player.is_playing:
+                self.toggle_play()
+            # 跳转到下一帧
             self.video_player.next_frame()
             self.update_frame()
     
     def set_position(self, position):
         if self.video_player:
+            # 保存当前的播放状态
+            was_playing = self.video_player.is_playing
+            
+            # 如果正在播放，先暂停视频
+            if was_playing:
+                self.toggle_play()
+            
+            # 跳转到指定位置
             self.slider.blockSignals(True)
             self.video_player.current_frame = position
             self.update_frame()
             self.slider.blockSignals(False)
+            
+            # 如果之前是播放状态，恢复播放
+            if was_playing:
+                self.toggle_play()
+            self.update_info_label()  # 更新信息标签
     
     def update_time_label(self):
         if self.video_player:
@@ -219,4 +266,24 @@ class MainWindow(QMainWindow):
             self.next_frame()
         else:
             super().keyPressEvent(event)  # 其他按键交给父类处理
+    
+    def prev_second(self):
+        """后退1秒"""
+        if self.video_player:
+            # 暂停视频
+            if self.video_player.is_playing:
+                self.toggle_play()
+            # 跳转1秒
+            self.video_player.jump_seconds(-1)
+            self.update_frame()
+    
+    def next_second(self):
+        """前进1秒"""
+        if self.video_player:
+            # 暂停视频
+            if self.video_player.is_playing:
+                self.toggle_play()
+            # 跳转1秒
+            self.video_player.jump_seconds(1)
+            self.update_frame()
         
