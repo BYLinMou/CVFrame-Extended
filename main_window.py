@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt, QTimer, QDir
 from PyQt5.QtGui import QImage, QPixmap
 from video_player import VideoPlayer
 import os
+import cv2
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -19,6 +20,9 @@ class MainWindow(QMainWindow):
         self.video_player = None
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
+        
+        # 全局变量，存储当前打开的文件夹路径
+        self.folder_path = ""
         
         # UI components
         self.video_label = QLabel(self)
@@ -100,11 +104,13 @@ class MainWindow(QMainWindow):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Video File", "", 
                                                  "Video Files (*.mp4 *.avi *.mov)")
         if file_path:
+            self.folder_path = os.path.dirname(file_path)  # 更新全局文件夹路径
             self.load_video(file_path)
     
     def open_folder(self):
         folder_path = QFileDialog.getExistingDirectory(self, "Open Video Folder")
         if folder_path:
+            self.folder_path = folder_path  # 更新全局文件夹路径
             self.load_folder(folder_path)
     
     def load_folder(self, folder_path):
@@ -121,10 +127,12 @@ class MainWindow(QMainWindow):
             self.video_list.setCurrentRow(0)
     
     def on_video_selected(self, item):
-        folder_path = QFileDialog.getExistingDirectory(self, "Open Video Folder")
-        if folder_path:
-            video_path = os.path.join(folder_path, item.text())
-            self.load_video(video_path)
+        """当视频列表中的视频被选中时调用"""
+        # 使用全局文件夹路径拼接视频路径
+        video_path = os.path.join(self.folder_path, item.text())
+        
+        # 加载选中的视频
+        self.load_video(video_path)
     
     def load_video(self, file_path):
         if self.video_player:
