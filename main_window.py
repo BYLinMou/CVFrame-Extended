@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt, QTimer, QDir
 from PyQt5.QtGui import QImage, QPixmap
 from video_player import VideoPlayer
 import os
-import cv2
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         self.slider.sliderMoved.connect(self.set_position)
         
         # Video list
-        self.video_list = QListWidget()
+        self.video_list = VideoListWidget(self)
         self.video_list.setSelectionMode(QAbstractItemView.SingleSelection)
         self.video_list.itemClicked.connect(self.on_video_selected)
         self.video_list.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
@@ -98,7 +98,7 @@ class MainWindow(QMainWindow):
         open_folder_action.triggered.connect(self.open_folder)
         
         # 添加快捷键提示
-        self.statusBar().showMessage("快捷键: 空格 - 播放/暂停, A - 上一帧, D - 下一帧")
+        self.statusBar().showMessage("Shortcut: Space - Play/Pause, A - Previous Frame, D - Next Frame")
         
     def open_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Video File", "", 
@@ -113,6 +113,10 @@ class MainWindow(QMainWindow):
         if folder_path:
             self.folder_path = folder_path  # 更新全局文件夹路径
             self.load_folder(folder_path)
+            # # 自动选中第一个视频
+            # if self.video_list.count() > 0:
+            #     self.video_list.setCurrentRow(0)
+            #     self.on_video_selected(self.video_list.item(0))
     
     def load_folder(self, folder_path):
         self.video_list.clear()
@@ -124,8 +128,9 @@ class MainWindow(QMainWindow):
         
         if video_files:
             first_video = os.path.join(folder_path, video_files[0])
-            self.load_video(first_video)
             self.video_list.setCurrentRow(0)
+            self.load_video(first_video)
+            
     
     def on_video_selected(self, item):
         """当视频列表中的视频被选中时调用"""
@@ -265,14 +270,15 @@ class MainWindow(QMainWindow):
         """处理键盘事件"""
         # print(f"Key pressed: {event.key()}")  # 调试信息，打印按下的键
         if event.key() == Qt.Key_Space:  # 空格键控制播放/暂停
-            # print("Space key pressed - Toggling play/pause")  # 调试信息
             self.toggle_play()
         elif event.key() == Qt.Key_A:  # A键控制上一帧
-            # print("A key pressed - Previous frame")  # 调试信息
             self.prev_frame()
         elif event.key() == Qt.Key_D:  # D键控制下一帧
-            # print("D key pressed - Next frame")  # 调试信息
             self.next_frame()
+        elif event.key() == Qt.Key_Q:  # Q键控制后退1秒
+            self.prev_second()
+        elif event.key() == Qt.Key_E:  # E键控制前进1秒
+            self.next_second()
         else:
             super().keyPressEvent(event)  # 其他按键交给父类处理
     
@@ -296,3 +302,13 @@ class MainWindow(QMainWindow):
             self.video_player.jump_seconds(1)
             self.update_frame()
         
+
+class VideoListWidget(QListWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.parent_window = parent  # 将父窗口保存为 parent_window
+
+    def keyPressEvent(self, event):           
+         # 将事件传递给父窗口
+        self.parent_window.keyPressEvent(event)
+    
