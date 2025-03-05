@@ -104,6 +104,7 @@ class MainWindow(QMainWindow):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Video File", "", 
                                                  "Video Files (*.mp4 *.avi *.mov)")
         if file_path:
+            self.video_list.clear()
             self.folder_path = os.path.dirname(file_path)  # 更新全局文件夹路径
             self.load_video(file_path)
     
