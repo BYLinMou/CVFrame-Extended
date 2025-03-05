@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                             QPushButton, QSlider, QLabel, QFileDialog, 
-                            QListWidget, QSplitter, QAbstractItemView, QSizePolicy)
+                            QListWidget, QSplitter, QAbstractItemView, QSizePolicy,
+                            QInputDialog, QMessageBox)
 from PyQt5.QtCore import Qt, QTimer, QDir
 from PyQt5.QtGui import QImage, QPixmap
 from video_player import VideoPlayer
@@ -96,9 +97,18 @@ class MainWindow(QMainWindow):
         open_action.triggered.connect(self.open_file)
         open_folder_action = file_menu.addAction('Open Folder')
         open_folder_action.triggered.connect(self.open_folder)
+
+        # 添加 Go 菜单
+        go_menu = menubar.addMenu('Go')
+        locate_frame_action = go_menu.addAction('Locate Frame')
+        locate_frame_action.triggered.connect(self.locate_frame)
+        locate_time_action = go_menu.addAction('Locate Time')
+        locate_time_action.triggered.connect(self.locate_time)
         
         # 添加快捷键提示
-        self.statusBar().showMessage("Shortcut: Space - Play/Pause, A - Previous Frame, D - Next Frame")
+        self.statusBar().showMessage(
+            "Shortcut: Space - Play/Pause, A - Previous Frame, D - Next Frame, Q - Back 1s, E - Forward 1s"
+        )
         
     def open_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Video File", "", 
@@ -279,6 +289,10 @@ class MainWindow(QMainWindow):
             self.prev_second()
         elif event.key() == Qt.Key_E:  # E键控制前进1秒
             self.next_second()
+        elif event.key() == Qt.Key_Z:  # Z键控制定位帧
+            self.locate_frame()
+        elif event.key() == Qt.Key_C:  # C键控制定位时间
+            self.locate_time()
         else:
             super().keyPressEvent(event)  # 其他按键交给父类处理
     
@@ -301,7 +315,35 @@ class MainWindow(QMainWindow):
             # 跳转1秒
             self.video_player.jump_seconds(1)
             self.update_frame()
-        
+    
+    def locate_frame(self):
+        """跳转到指定帧"""
+        if self.video_player:
+            frame, ok = QInputDialog.getInt(
+                self, "Locate Frame", "Enter frame number:", 
+                min=0, max=self.video_player.frame_count - 1
+            )
+            if ok:
+                self.set_position(frame)
+
+    def locate_time(self):
+        """跳转到指定时间"""
+        if self.video_player:
+            total_time = self.video_player.frame_count / self.video_player.fps
+            time_str, ok = QInputDialog.getText(
+                self, "Locate Time", 
+                f"Enter time (HH:MM:SS, max {self.format_time(total_time)}):"
+            )
+            if ok:
+                try:
+                    # 解析时间字符串
+                    h, m, s = map(int, time_str.split(':'))
+                    target_time = h * 3600 + m * 60 + s
+                    # 跳转到指定时间
+                    self.set_position(int(target_time * self.video_player.fps))
+                except ValueError:
+                    QMessageBox.warning(self, "Invalid Time", "Please enter time in HH:MM:SS format.")
+
 
 class VideoListWidget(QListWidget):
     def __init__(self, parent=None):
