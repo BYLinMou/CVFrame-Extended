@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                             QListWidget, QSplitter, QAbstractItemView, QSizePolicy,
                             QInputDialog, QMessageBox)
 from PyQt5.QtCore import Qt, QTimer, QDir
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QImage, QPixmap, QIcon
 from video_player import VideoPlayer
 import os
 
@@ -13,6 +13,9 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("CV Frame Labeler")
         self.setGeometry(100, 100, 1000, 600)
+        
+        # 设置窗口图标
+        self.setWindowIcon(QIcon('icon.ico'))
         
         # 设置窗口焦点策略，确保窗口可以捕获键盘事件
         self.setFocusPolicy(Qt.StrongFocus)
