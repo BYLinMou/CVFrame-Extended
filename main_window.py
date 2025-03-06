@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("CV Frame Labeler")
         self.setGeometry(100, 100, 1000, 600)
-        
+
         # 设置窗口图标
         self.setWindowIcon(QIcon('icon.ico'))
         
@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
         self.play_btn = QPushButton("Play")
         self.play_btn.clicked.connect(self.toggle_play)
         
-        self.prev_second_btn = QPushButton("<< 1s")
+        self.prev_second_btn = QPushButton("<< 1 second")
         self.prev_second_btn.clicked.connect(self.prev_second)
         
         self.prev_frame_btn = QPushButton("<<")
@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
         self.next_frame_btn = QPushButton(">>")
         self.next_frame_btn.clicked.connect(self.next_frame)
         
-        self.next_second_btn = QPushButton("1s >>")
+        self.next_second_btn = QPushButton("1 second >>")
         self.next_second_btn.clicked.connect(self.next_second)
         
         self.slider = QSlider(Qt.Horizontal)
@@ -113,6 +113,10 @@ class MainWindow(QMainWindow):
             "Shortcut: Space - Play/Pause, A - Previous Frame, D - Next Frame, Q - Back 1s, E - Forward 1s"
         )
         
+        # Initialize offsets for letterboxing
+        self._video_offset_x = 0
+        self._video_offset_y = 0
+
     def open_file(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Open Video File", "", 
                                                  "Video Files (*.mp4 *.avi *.mov)")
@@ -126,10 +130,6 @@ class MainWindow(QMainWindow):
         if folder_path:
             self.folder_path = folder_path  # 更新全局文件夹路径
             self.load_folder(folder_path)
-            # # 自动选中第一个视频
-            # if self.video_list.count() > 0:
-            #     self.video_list.setCurrentRow(0)
-            #     self.on_video_selected(self.video_list.item(0))
     
     def load_folder(self, folder_path):
         self.video_list.clear()
@@ -144,7 +144,6 @@ class MainWindow(QMainWindow):
             self.video_list.setCurrentRow(0)
             self.load_video(first_video)
             
-    
     def on_video_selected(self, item):
         """当视频列表中的视频被选中时调用"""
         # 使用全局文件夹路径拼接视频路径
@@ -200,7 +199,6 @@ class MainWindow(QMainWindow):
                     self._cached_pixmap = None  # Invalidate cached pixmap if label size changes
 
                 # Always update the pixmap for a new frame.
-                # (If you wish to avoid re-scaling on duplicate frames, you can add additional logic here.)
                 self._cached_pixmap = QPixmap.fromImage(q_img).scaled(
                     label_size,
                     Qt.KeepAspectRatio,
@@ -212,13 +210,21 @@ class MainWindow(QMainWindow):
                 self.video_label.setPixmap(self._cached_pixmap)
                 self.video_label.setUpdatesEnabled(True)
                 
+                # --- Compute letterbox offsets for the displayed video ---
+                pixmap_width = self._cached_pixmap.width()
+                pixmap_height = self._cached_pixmap.height()
+                label_width = self.video_label.width()
+                label_height = self.video_label.height()
+
+                # The displayed pixmap may be centered if it's smaller than the label.
+                self._video_offset_x = max(0, (label_width - pixmap_width) // 2)
+                self._video_offset_y = max(0, (label_height - pixmap_height) // 2)
+
                 self.slider.blockSignals(True)
                 self.slider.setValue(self.video_player.current_frame)
                 self.slider.blockSignals(False)
                 self.update_info_label()
 
-
-    
     def update_info_label(self):
         """更新视频左上角的信息标签，始终锚定于视频区域"""
         if self.video_player:
@@ -232,9 +238,9 @@ class MainWindow(QMainWindow):
             )
             # Adjust the label's size based on its content.
             self.info_label.adjustSize()
-            # Calculate the desired position relative to the video display.
-            # For example, 10 pixels from the top-left corner of video_label:
-            offset_x, offset_y = 10, 10
+            # Offset the label so it appears at (10,10) relative to the displayed video area.
+            offset_x = self._video_offset_x + 10
+            offset_y = self._video_offset_y + 10
             self.info_label.move(offset_x, offset_y)
 
     def prev_frame(self):
@@ -299,7 +305,6 @@ class MainWindow(QMainWindow):
         
     def keyPressEvent(self, event):
         """处理键盘事件"""
-        # print(f"Key pressed: {event.key()}")  # 调试信息，打印按下的键
         if event.key() == Qt.Key_Space:  # 空格键控制播放/暂停
             self.toggle_play()
         elif event.key() == Qt.Key_A:  # A键控制上一帧
@@ -315,25 +320,21 @@ class MainWindow(QMainWindow):
         elif event.key() == Qt.Key_C:  # C键控制定位时间
             self.locate_time()
         else:
-            super().keyPressEvent(event)  # 其他按键交给父类处理
+            super().keyPressEvent(event)
     
     def prev_second(self):
         """后退1秒"""
         if self.video_player:
-            # 暂停视频
             if self.video_player.is_playing:
                 self.toggle_play()
-            # 跳转1秒
             self.video_player.jump_seconds(-1)
             self.update_frame()
     
     def next_second(self):
         """前进1秒"""
         if self.video_player:
-            # 暂停视频
             if self.video_player.is_playing:
                 self.toggle_play()
-            # 跳转1秒
             self.video_player.jump_seconds(1)
             self.update_frame()
     
@@ -357,10 +358,8 @@ class MainWindow(QMainWindow):
             )
             if ok:
                 try:
-                    # 解析时间字符串
                     h, m, s = map(int, time_str.split(':'))
                     target_time = h * 3600 + m * 60 + s
-                    # 跳转到指定时间
                     self.set_position(int(target_time * self.video_player.fps))
                 except ValueError:
                     QMessageBox.warning(self, "Invalid Time", "Please enter time in HH:MM:SS format.")
@@ -372,6 +371,5 @@ class VideoListWidget(QListWidget):
         self.parent_window = parent  # 将父窗口保存为 parent_window
 
     def keyPressEvent(self, event):           
-         # 将事件传递给父窗口
+        # 将事件传递给父窗口
         self.parent_window.keyPressEvent(event)
-    
