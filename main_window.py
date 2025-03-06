@@ -184,25 +184,46 @@ class MainWindow(QMainWindow):
                 self.video_player.is_playing = False
                 self.play_btn.setText("Play")
                 self.timer.stop()
-        
+
         if self.video_player:
             frame = self.video_player.get_frame()
             if frame is not None:
                 h, w, ch = frame.shape
                 bytes_per_line = ch * w
+                # Create the QImage from the raw frame data.
                 q_img = QImage(frame.data, w, h, bytes_per_line, QImage.Format_RGB888)
                 
+                # Get the current size of the video label.
                 label_size = self.video_label.size()
-                scaled_pixmap = QPixmap.fromImage(q_img).scaled(
-                    label_size, 
-                    Qt.KeepAspectRatio, 
-                    Qt.SmoothTransformation
-                )
-                self.video_label.setPixmap(scaled_pixmap)
+                
+                # Cache the label size to avoid re-scaling if unchanged.
+                if not hasattr(self, '_cached_label_size') or self._cached_label_size != label_size:
+                    self._cached_label_size = label_size
+                    # Invalidate the cached pixmap if the label size has changed.
+                    self._cached_pixmap = None
+
+                # If we don't have a cached scaled pixmap, create one.
+                if self._cached_pixmap is None:
+                    # Using FastTransformation speeds up the scaling at the expense of some quality.
+                    self._cached_pixmap = QPixmap.fromImage(q_img).scaled(
+                        label_size,
+                        Qt.KeepAspectRatio,
+                        Qt.FastTransformation
+                    )
+                else:
+                    # Otherwise, update the cached pixmap by re-creating it.
+                    self._cached_pixmap = QPixmap.fromImage(q_img).scaled(
+                        label_size,
+                        Qt.KeepAspectRatio,
+                        Qt.FastTransformation
+                    )
+
+                self.video_label.setPixmap(self._cached_pixmap)
                 self.slider.blockSignals(True)
                 self.slider.setValue(self.video_player.current_frame)
                 self.slider.blockSignals(False)
-                self.update_info_label()  # 更新信息标签
+                self.update_info_label()
+
     
     def update_info_label(self):
         """更新视频左上角的信息标签"""
