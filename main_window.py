@@ -341,9 +341,11 @@ class MainWindow(QMainWindow):
     def locate_frame(self):
         """跳转到指定帧"""
         if self.video_player:
+            current_frame = self.video_player.current_frame
             frame, ok = QInputDialog.getInt(
                 self, "Locate Frame", "Enter frame number:", 
-                min=0, max=self.video_player.frame_count - 1
+                min=0, max=self.video_player.frame_count - 1,
+                value=current_frame,
             )
             if ok:
                 self.set_position(frame)
@@ -351,10 +353,12 @@ class MainWindow(QMainWindow):
     def locate_time(self):
         """跳转到指定时间"""
         if self.video_player:
+            current_time = self.video_player.get_current_time()
             total_time = self.video_player.frame_count / self.video_player.fps
             time_str, ok = QInputDialog.getText(
                 self, "Locate Time", 
-                f"Enter time (HH:MM:SS, max {self.format_time(total_time)}):"
+                f"Enter time (HH:MM:SS, max {self.format_time(total_time)}):",
+                text=self.format_time(current_time)
             )
             if ok:
                 try:
