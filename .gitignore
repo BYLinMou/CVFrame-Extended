@@ -1,8 +1,13 @@
-videos/
 .vscode/
+.DS_Store
 __pycache__/
+videos/
 build/
 dist/
-.DS_Store
 !icon.ico
 CVFrameLabeler.spec
+tempCodeRunnerFile.py
+*.mp4
+*.csv
+
+

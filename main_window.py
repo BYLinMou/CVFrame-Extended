@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                             QPushButton, QSlider, QLabel, QFileDialog, 
                             QListWidget, QSplitter, QAbstractItemView, QSizePolicy,
                             QInputDialog, QMessageBox)
+from projection_window import ProjectionWindow  # added import
 from PyQt5.QtCore import Qt, QTimer, QDir
 from PyQt5.QtGui import QImage, QPixmap, QIcon
 from video_player import VideoPlayer
@@ -108,6 +109,10 @@ class MainWindow(QMainWindow):
         locate_time_action = go_menu.addAction('Locate Time')
         locate_time_action.triggered.connect(self.locate_time)
         
+        proj_menu = menubar.addMenu('Projection')
+        locate_frame_action = proj_menu.addAction('3D Mocap Points')
+        locate_frame_action.triggered.connect(self.open_projection_window)
+
         # 添加快捷键提示
         self.statusBar().showMessage(
             "Shortcut: Space - Play/Pause, A - Previous Frame, D - Next Frame, Q - Back 1s, E - Forward 1s"
@@ -165,6 +170,11 @@ class MainWindow(QMainWindow):
             self.next_frame_btn.setEnabled(True)
         except ValueError as e:
             print(str(e))
+            
+    def open_projection_window(self):
+        """打开投影窗口"""
+        self.proj_window = ProjectionWindow()
+        self.proj_window.show()
     
     def toggle_play(self):
         if self.video_player:
@@ -367,6 +377,7 @@ class MainWindow(QMainWindow):
                     self.set_position(int(target_time * self.video_player.fps))
                 except ValueError:
                     QMessageBox.warning(self, "Invalid Time", "Please enter time in HH:MM:SS format.")
+
 
 
 class VideoListWidget(QListWidget):
