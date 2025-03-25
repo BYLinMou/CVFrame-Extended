@@ -77,6 +77,8 @@ class ProjectionWindow(QMainWindow):
         video_layout.addWidget(self.btn_load_video, alignment=Qt.AlignCenter)
         video_layout.addWidget(self.label_loaded_video, alignment=Qt.AlignCenter)
         video_widget.setLayout(video_layout)
+
+        
         # Points
         self.btn_load_points = QPushButton("Load 3D Data (CSV)")
         self.btn_load_points.setFixedSize(150, 30)
@@ -186,26 +188,84 @@ class ProjectionWindow(QMainWindow):
     def load_points(self):
         filename, _ = QFileDialog.getOpenFileName(self, "Select 3D Data CSV", "", "CSV Files (*.csv)")
         if filename:
-            try:
-                df = pd.read_csv(filename, skiprows=1)
-                data = []
-                num_cols = df.shape[1]
-                if num_cols % 3 != 0:
-                    raise ValueError("Number of columns is not a multiple of 3")
-                num_points = num_cols // 3
-                for idx, row in df.iterrows():
-                    points = np.array(row).astype(float).reshape(num_points, 3)
-                    data.append(points)
-                self.points3d = np.array(data)
-                self.loaded_points_filename = os.path.basename(filename)
-                QMessageBox.information(self, "Success", f"Loaded 3D data with {self.points3d.shape[0]} frames")
-                self.update_loaded_files_label()
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"Failed to load 3D data:\n{str(e)}")
+        # try:
+            df = pd.read_csv(filename, skiprows=1)
+            
+            # Extract points using SPML dataset format mapping
+            target_joints_ordered = {
+                0:  [('Hip','Bone')],
+                1:  [('LThigh','Bone')],
+                2:  [('RThigh','Bone')],
+                3:  [('Ab','Bone')],
+                4:  [('LShin','Bone')],
+                5:  [('RShin','Bone')],
+                6:  [('BackLeft','Bone Marker'),('BackRight','Bone Marker')],
+                7:  [('LFoot','Bone')],
+                8:  [('RFoot','Bone')],
+                9:  [('BackTop','Bone Marker')],
+                10: [('LToe','Bone')],
+                11: [('RToe','Bone')],
+                12: [('Neck','Bone')], 
+                13: [('LShoulder','Bone')],
+                14: [('RShoulder','Bone')],
+                15: [('Head','Bone')],
+                16: [('LUArm','Bone')],
+                17: [('RUArm','Bone')],
+                18: [('LFArm','Bone')],
+                19: [('RFArm','Bone')],
+                20: [('LWristIn','Bone Marker'),('LWristOut','Bone Marker')],
+                21: [('RWristIn','Bone Marker'),('RWristOut','Bone Marker')],
+                22: [('RHandOut','Bone Marker')],
+                23: [('RHandOut','Bone Marker')],
+            }
+            all_joints = [joint[0] for joints in target_joints_ordered.values() for joint in joints]
+            header_row_values = df.iloc[0].values[2:]
+            unique_values = np.unique(header_row_values)
+            unique_values = [ v[13:] for v in unique_values]
+            # print("Unique col identifiers:", unique_values)
+            filtered_joints_ordered = [value for value in all_joints if value[13:] in unique_values]
+            print("Number of filtered joints:", len(filtered_joints_ordered))
+            print("Filtered Joints Ordered:", filtered_joints_ordered)
+            print("Do we have enough data? ", len(filtered_joints_ordered) == len(all_joints))
+            
+            # Use 1000 frames beginning at row index start_f = 18
+            p = 1000
+            start_f = 15
+            data_ = np.zeros((p, 24, 3))
+            type_list = list(df.iloc[0].index)
+            
+            for frame in range(p):
+                for joint in range(len(target_joints_ordered)):
+                    if len(target_joints_ordered[joint]) > 1:
+                        matching_columns_0 = [i for i, value in enumerate(df.iloc[0].values) 
+                                                #[13:] is used to remove the 'Skeleton:00x' part of the string
+                                                if str(value)[13:] == target_joints_ordered[joint][0][0] and 
+                                                type_list[i].startswith(target_joints_ordered[joint][0][1])][-3:]
+                        matching_columns_1 = [i for i, value in enumerate(df.iloc[0].values) 
+                                                if str(value)[13:] == target_joints_ordered[joint][1][0] and 
+                                                type_list[i].startswith(target_joints_ordered[joint][1][1])][-3:]
+                        position_0 = df.iloc[start_f+frame][matching_columns_0].values.astype(float)
+                        position_1 = df.iloc[start_f+frame][matching_columns_1].values.astype(float)
+                        final_ = (position_0 + position_1) / 2
+                        data_[frame, joint] = final_
+                    else:
+                        matching_columns = [i for i, value in enumerate(df.iloc[0].values) 
+                                            if str(value)[13:] == target_joints_ordered[joint][0][0] and 
+                                            type_list[i].startswith(target_joints_ordered[joint][0][1])][-3:]
+                        # print(matching_columns)
+                        data_[frame, joint] = np.array(df.iloc[start_f+frame][matching_columns].values, dtype=float)
+            self.points3d = data_
+            self.loaded_points_filename = os.path.basename(filename)
+            QMessageBox.information(self, "Success", f"Loaded 3D data with {self.points3d.shape[0]} frames")
+            self.update_loaded_files_label()
+        # except Exception as e:
+        #     QMessageBox.critical(self, "Error", f"Failed to load 3D data:\n{str(e)}")
 
     def update_loaded_files_label(self):
-        files_text = f"Video: {self.loaded_video_filename} | Intrinsics: {self.loaded_intrinsics_filename} | Extrinsics: {self.loaded_extrinsics_filename} | 3D Data: {self.loaded_points_filename}"
-        self.label_files.setText(files_text)
+        self.label_loaded_video.setText(self.loaded_video_filename if self.loaded_video_filename else "No File Loaded")
+        self.label_loaded_intr.setText(self.loaded_intrinsics_filename if self.loaded_intrinsics_filename else "No File Loaded")
+        self.label_loaded_extr.setText(self.loaded_extrinsics_filename if self.loaded_extrinsics_filename else "No File Loaded")
+        self.label_loaded_points.setText(self.loaded_points_filename if self.loaded_points_filename else "No File Loaded")
 
     def change_offset(self, value):
         self.frame_offset = value
@@ -260,12 +320,13 @@ class ProjectionWindow(QMainWindow):
             else:
                 dcoeff = np.array(dcoeff)
             frame_bgr = cv2.undistort(frame_bgr, cam_mtx, dcoeff)
-        # If we have 3D data and extrinsics, project the points onto the frame
+        # Project points for frames in the range [current-30, current+30]
         if self.points3d is not None and self.extrinsics is not None:
-            vid_frame_idx = self.player.current_frame
-            data_frame_idx = vid_frame_idx + self.frame_offset
-            if 0 <= data_frame_idx < self.points3d.shape[0]:
-                pts3d = self.points3d[data_frame_idx]
+            current_idx = self.player.current_frame + self.frame_offset
+            start_idx = max(0, current_idx - 30)
+            end_idx = min(self.points3d.shape[0] - 1, current_idx + 30)
+            for idx in range(start_idx, end_idx + 1):
+                pts3d = self.points3d[idx]
                 if self.rvec is not None and self.tvec is not None:
                     if self.intrinsics is not None:
                         cam_mtx = np.array(self.intrinsics["camera_matrix"])
@@ -278,7 +339,10 @@ class ProjectionWindow(QMainWindow):
                     for pt in projected:
                         x, y = pt
                         if 0 <= x < frame_bgr.shape[1] and 0 <= y < frame_bgr.shape[0]:
-                            cv2.circle(frame_bgr, (x, y), 4, (0, 0, 255), -1)
+                            if idx == current_idx:
+                                cv2.circle(frame_bgr, (x, y), 4, (0, 0, 255), -1)
+                            else:
+                                cv2.circle(frame_bgr, (x, y), 2, (255, 0, 0), -1)
         # Convert back to RGB for display
         frame_rgb = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
         height, width, channel = frame_rgb.shape
