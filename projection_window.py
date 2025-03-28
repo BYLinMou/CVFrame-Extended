@@ -184,9 +184,9 @@ class ProjectionWindow(QMainWindow):
             try:
                 # no block size specified, so pandas will read the entire file
                 df = pd.read_csv(filename, skiprows=1, low_memory=False)
-                start_f = 5 ### skip the first 5 rows which are hearders (totally 6 rows, one row skipped in file reading)
+                start_f = 4 ### skip the first 4 rows which are hearders (totally 6 rows, one row skipped in file reading)
                 self.frame_offset = 0
-                p = len(df) - 5
+                p = len(df) - start_f
                 print(p)
                 progress = QProgressDialog("Loading 3D data...", "Cancel", 0, p, self)
                 progress.setWindowModality(Qt.WindowModal)
