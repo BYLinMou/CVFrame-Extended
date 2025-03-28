@@ -182,7 +182,8 @@ class ProjectionWindow(QMainWindow):
         filename, _ = QFileDialog.getOpenFileName(self, "Select 3D Data CSV", "", "CSV Files (*.csv)")
         if filename:
             try:
-                df = pd.read_csv(filename, skiprows=1)
+                # no block size specified, so pandas will read the entire file
+                df = pd.read_csv(filename, skiprows=1, low_memory=False)
                 start_f = 5 ### skip the first 5 rows which are hearders (totally 6 rows, one row skipped in file reading)
                 self.frame_offset = 0
                 p = len(df) - 5
@@ -205,6 +206,10 @@ class ProjectionWindow(QMainWindow):
                 data_ = np.zeros((p, 24, 3))
                 type_list = list(df.iloc[0].index)                
                 for frame in range(p):
+                    if progress.wasCanceled():  # Check if the user canceled the operation
+                        self.points3d = None
+                        QMessageBox.information(self, "Canceled", "3D data loading was canceled.")
+                        break
                     for joint in range(len(TARGET_JOINTS_ORDERED)):
                         if len(TARGET_JOINTS_ORDERED[joint]) > 1:
                             matching_columns_0 = [i for i, value in enumerate(df.iloc[0].values) 
@@ -227,10 +232,11 @@ class ProjectionWindow(QMainWindow):
                     QCoreApplication.processEvents()
                     
                 progress.close()
-                self.points3d = data_
-                self.loaded_points_filename = os.path.basename(filename)
-                QMessageBox.information(self, "Success", f"Loaded 3D data with {self.points3d.shape[0]} frames")
-                self.update_loaded_files_label()
+                if not progress.wasCanceled():  # Only proceed if not canceled
+                    self.points3d = data_
+                    self.loaded_points_filename = os.path.basename(filename)
+                    QMessageBox.information(self, "Success", f"Loaded 3D data with {self.points3d.shape[0]} frames")
+                    self.update_loaded_files_label()
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to load 3D data:\n{str(e)}")
 
