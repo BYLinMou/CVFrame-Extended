@@ -9,5 +9,4 @@ CVFrameLabeler.spec
 tempCodeRunnerFile.py
 *.mp4
 *.csv
-
-
+test*.py
