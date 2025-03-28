@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import Qt, QTimer, QCoreApplication
 from video_player import VideoPlayer  
+from points3d_cache import Points3DCache
 
 class ProjectionWindow(QMainWindow):
     def __init__(self):
@@ -182,61 +183,23 @@ class ProjectionWindow(QMainWindow):
         filename, _ = QFileDialog.getOpenFileName(self, "Select 3D Data CSV", "", "CSV Files (*.csv)")
         if filename:
             try:
-                # no block size specified, so pandas will read the entire file
                 df = pd.read_csv(filename, skiprows=1, low_memory=False)
-                start_f = 4 ### skip the first 4 rows which are hearders (totally 6 rows, one row skipped in file reading)
+                start_f = 4  # Skip the first 4 rows which are headers
                 self.frame_offset = 0
                 p = len(df) - start_f
                 print(p)
-                progress = QProgressDialog("Loading 3D data...", "Cancel", 0, p, self)
-                progress.setWindowModality(Qt.WindowModal)
-                progress.setMinimumDuration(0)
-                progress.setFixedSize(300, 100)
-                
-                ### Extract column names using SPML dataset format mapping
+                # progress = QProgressDialog("Loading 3D data...", "Cancel", 0, p, self)
+                # progress.setWindowModality(Qt.WindowModal)
+                # progress.setMinimumDuration(0)
+                # progress.setFixedSize(300, 100)
 
-                all_joints = [joint[0] for joints in TARGET_JOINTS_ORDERED.values() for joint in joints]
-                header_row_values = df.iloc[0].values[2:]
-                unique_values = np.unique(header_row_values)
-                unique_values = [ v[13:] for v in unique_values]
-                filtered_joints_ordered = [value for value in all_joints if value[13:] in unique_values]
+                type_list = list(df.iloc[0].index)
+                self.points3d = Points3DCache(df, start_f, type_list)
 
-                
-                ### Extract 3D points that fit the names
-                data_ = np.zeros((p, 24, 3))
-                type_list = list(df.iloc[0].index)                
-                for frame in range(p):
-                    if progress.wasCanceled():  # Check if the user canceled the operation
-                        self.points3d = None
-                        QMessageBox.information(self, "Canceled", "3D data loading was canceled.")
-                        break
-                    for joint in range(len(TARGET_JOINTS_ORDERED)):
-                        if len(TARGET_JOINTS_ORDERED[joint]) > 1:
-                            matching_columns_0 = [i for i, value in enumerate(df.iloc[0].values) 
-                                                    #[13:] is used to remove the 'Skeleton:00x' part of the string
-                                                    if str(value)[13:] == TARGET_JOINTS_ORDERED[joint][0][0] and 
-                                                    type_list[i].startswith(TARGET_JOINTS_ORDERED[joint][0][1])][-3:]
-                            matching_columns_1 = [i for i, value in enumerate(df.iloc[0].values) 
-                                                    if str(value)[13:] == TARGET_JOINTS_ORDERED[joint][1][0] and 
-                                                    type_list[i].startswith(TARGET_JOINTS_ORDERED[joint][1][1])][-3:]
-                            position_0 = df.iloc[start_f+frame][matching_columns_0].values.astype(float)
-                            position_1 = df.iloc[start_f+frame][matching_columns_1].values.astype(float)
-                            final_ = (position_0 + position_1) / 2
-                            data_[frame, joint] = final_
-                        else:
-                            matching_columns = [i for i, value in enumerate(df.iloc[0].values) 
-                                                if str(value)[13:] == TARGET_JOINTS_ORDERED[joint][0][0] and 
-                                                type_list[i].startswith(TARGET_JOINTS_ORDERED[joint][0][1])][-3:]
-                            data_[frame, joint] = np.array(df.iloc[start_f+frame][matching_columns].values, dtype=float)
-                    progress.setValue(frame)
-                    QCoreApplication.processEvents()
-                    
-                progress.close()
-                if not progress.wasCanceled():  # Only proceed if not canceled
-                    self.points3d = data_
-                    self.loaded_points_filename = os.path.basename(filename)
-                    QMessageBox.information(self, "Success", f"Loaded 3D data with {self.points3d.shape[0]} frames")
-                    self.update_loaded_files_label()
+                # progress.close()
+                QMessageBox.information(self, "Success", f"3D data initialized with {p} frames")
+                self.loaded_points_filename = os.path.basename(filename)
+                self.update_loaded_files_label()
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to load 3D data:\n{str(e)}")
 
@@ -417,32 +380,7 @@ class ProjectionWindow(QMainWindow):
             self.player.release()
         event.accept()
         
-TARGET_JOINTS_ORDERED = {
-    0:  [('Hip','Bone')],
-    1:  [('LThigh','Bone')],
-    2:  [('RThigh','Bone')],
-    3:  [('Ab','Bone')],
-    4:  [('LShin','Bone')],
-    5:  [('RShin','Bone')],
-    6:  [('BackLeft','Bone Marker'),('BackRight','Bone Marker')],
-    7:  [('LFoot','Bone')],
-    8:  [('RFoot','Bone')],
-    9:  [('BackTop','Bone Marker')],
-    10: [('LToe','Bone')],
-    11: [('RToe','Bone')],
-    12: [('Neck','Bone')], 
-    13: [('LShoulder','Bone')],
-    14: [('RShoulder','Bone')],
-    15: [('Head','Bone')],
-    16: [('LUArm','Bone')],
-    17: [('RUArm','Bone')],
-    18: [('LFArm','Bone')],
-    19: [('RFArm','Bone')],
-    20: [('LWristIn','Bone Marker'),('LWristOut','Bone Marker')],
-    21: [('RWristIn','Bone Marker'),('RWristOut','Bone Marker')],
-    22: [('RHandOut','Bone Marker')],
-    23: [('RHandOut','Bone Marker')],
-}
+
 
 
 if __name__ == "__main__":
