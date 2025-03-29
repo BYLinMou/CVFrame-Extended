@@ -232,14 +232,14 @@ class ProjectionWindow(QMainWindow):
         frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         
         # Optionally undistort using intrinsics if available
-        if self.intrinsics is not None:
-            cam_mtx = np.array(self.intrinsics["camera_matrix"])
-            dcoeff = self.intrinsics["dist_coeffs"]
-            if isinstance(dcoeff[0], list):
-                dcoeff = np.array(dcoeff[0])
-            else:
-                dcoeff = np.array(dcoeff)
-            frame_bgr = cv2.undistort(frame_bgr, cam_mtx, dcoeff)
+        # if self.intrinsics is not None:
+        #     cam_mtx = np.array(self.intrinsics["camera_matrix"])
+        #     dcoeff = self.intrinsics["dist_coeffs"]
+        #     if isinstance(dcoeff[0], list):
+        #         dcoeff = np.array(dcoeff[0])
+        #     else:
+        #         dcoeff = np.array(dcoeff)
+        #     frame_bgr = cv2.undistort(frame_bgr, cam_mtx, dcoeff)
         
         # Map 3D points onto the frame if available
         if self.points3d is not None and self.extrinsics is not None:
