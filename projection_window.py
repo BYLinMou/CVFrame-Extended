@@ -174,6 +174,9 @@ class ProjectionWindow(QMainWindow):
                     self.player.release()
                 self.player = VideoPlayer(filename)
                 self.loaded_video_filename = os.path.basename(filename)
+                self.frame_offset = 0
+                if hasattr(self, 'offset_spin'):
+                    self.offset_spin.setValue(0)
                 # QMessageBox.information(self, "Success", f"Loaded Video from {self.loaded_video_filename}")
                 self.update_loaded_files_label()
             except Exception as e:
@@ -195,7 +198,9 @@ class ProjectionWindow(QMainWindow):
 
                 type_list = list(df.iloc[0].index)
                 self.points3d = Points3DCache(df, start_f, type_list)
-
+                self.frame_offset = 0
+                if hasattr(self, 'offset_spin'):
+                    self.offset_spin.setValue(0)
                 # progress.close()
                 QMessageBox.information(self, "Success", f"3D data initialized with {p} frames")
                 self.loaded_points_filename = os.path.basename(filename)
