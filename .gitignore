@@ -1,12 +1,13 @@
 .vscode/
 .DS_Store
 __pycache__/
-videos/
-build/
-dist/
+/build
+/dist
+/output
 !icon.ico
 CVFrameLabeler.spec
 tempCodeRunnerFile.py
 *.mp4
 *.csv
 test*.py
+*.xlsx

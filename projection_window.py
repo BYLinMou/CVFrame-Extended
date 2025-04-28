@@ -73,7 +73,7 @@ class ProjectionWindow(QMainWindow):
         sync_layout = QHBoxLayout()
         offset_label = QLabel("Frame Offset:")
         self.offset_spin = QSpinBox()
-        self.offset_spin.setRange(-1000, 1000)
+        self.offset_spin.setRange(-20000, 20000)
         self.offset_spin.setValue(self.frame_offset)
         self.offset_spin.valueChanged.connect(self.change_offset)
         sync_layout.addWidget(offset_label)
