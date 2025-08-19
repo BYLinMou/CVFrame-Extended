@@ -3,10 +3,11 @@ import os
 import pandas as pd
 
 # --- CONFIGURATION ---
-video_code = '01'
-video_suffix = 'C'
-video_base_path = f"./data/25.1.17_{video_code}"       # Path to your video file
-excel_path = f'./data/DataCollection_{video_code}.xlsx'        # Path to your Excel file
+video_code = '04'
+video_folder_name = "25.1.10"
+video_suffix = 'L'
+video_base_path = f"./FrameMarking/CrossCheck/{video_folder_name}_{video_code}"       # Path to your video file
+excel_path = f'./data/DataCollection/DataCollection_{video_code}.xlsx'        # Path to your Excel file
 sheet_video_map = {
     'Gaming Museum':   f'{video_code}_museum_{video_suffix}.mp4',
     'BowlingVR':       f'{video_code}_bowling_{video_suffix}.mp4',
@@ -31,7 +32,7 @@ for sheet_name, video_file in sheet_video_map.items():
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Use 'XVID' for .avi if needed
 
-    output_folder = os.path.join("./output", f"Clips_{video_file}")
+    output_folder = os.path.join("./data/output", f"Clips_{video_file}") # output path
     os.makedirs(output_folder, exist_ok=True)
     df = pd.read_excel(excel_path, sheet_name=sheet_name)
     rep_start_cols = [col for col in df.columns if 'Repetition' in col and 'Start' in col]

@@ -1,0 +1,109 @@
+Ver 0.1
+成功讀取 Excel 檔案。
+Excel 檔案內容：
+         csv_name      video_C_name  ... end_CSV  L_min
+0     02_boss.csv     02_boss_C.mp4  ...   23639  23622
+1  02_bowling.csv  02_bowling_C.mp4  ...   16648  16642
+2    02_candy.csv    02_candy_C.mp4  ...   14556  14545
+3  02_gallery.csv  02_gallery_C.mp4  ...   18601  18595
+4   02_museum.csv   02_museum_C.mp4  ...   24356  24341
+5   02_travel.csv   02_travel_C.mp4  ...   16476  16459
+
+[6 rows x 10 columns]
+處理行 1:
+  csv_name: 02_boss.csv
+  video_C_name: 02_boss_C.mp4
+  video_L_name: 02_boss_L.mp4
+  start_C: 0, end_C: 23621
+  start_L: 0, end_L: 23621
+  start_CSV: 18, end_CSV: 23639
+  L_min: 23622
+  video_C 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_boss_C.mp4
+  video_L 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_boss_L.mp4
+  CSV 輸入路徑: /home/bylinmou/work/test/smoothed/02_boss.csv
+  (影片 /home/bylinmou/work/test/25.1.9_02/02_boss_C.mp4 的總幀數: 23639)
+  Cropped and saved 23622 frames from /home/bylinmou/work/test/25.1.9_02/02_boss_C.mp4 to /home/bylinmou/work/test/cropped_videos/02_boss_C.mp4 (frames 0-23621)
+  Cropped and saved 23622 data rows (after 7 headers) from /home/bylinmou/work/test/smoothed/02_boss.csv to /home/bylinmou/work/test/sliced_csvs/02_boss.csv (rows 18-23639)
+Traceback (most recent call last):
+  File "/home/bylinmou/work/test/Alignment.py", line 185, in <module>
+    main()
+    ~~~~^^
+  File "/home/bylinmou/work/test/Alignment.py", line 128, in main
+    start_L = int(row["start_L"])
+ValueError: cannot convert float NaN to integer
+Ver 0.1
+成功讀取 Excel 檔案。
+Excel 檔案內容：
+         csv_name      video_C_name  ... end_CSV  L_min
+0  02_bowling.csv  02_bowling_C.mp4  ...   16648  16642
+1    02_candy.csv    02_candy_C.mp4  ...   14556  14545
+2  02_gallery.csv  02_gallery_C.mp4  ...   18601  18595
+3   02_museum.csv   02_museum_C.mp4  ...   24356  24341
+4   02_travel.csv   02_travel_C.mp4  ...   16476  16459
+
+[5 rows x 10 columns]
+處理行 1:
+  csv_name: 02_bowling.csv
+  video_C_name: 02_bowling_C.mp4
+  video_L_name: 02_bowling_L.mp4
+  start_C: 4, end_C: 16645
+  start_CSV: 7, end_CSV: 16648
+  L_min: 16642
+  video_C 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_bowling_C.mp4
+  video_L 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_bowling_L.mp4
+  CSV 輸入路徑: /home/bylinmou/work/test/smoothed/02_bowling.csv
+  (影片 /home/bylinmou/work/test/25.1.9_02/02_bowling_C.mp4 的總幀數: 16646)
+  Cropped and saved 16642 frames from /home/bylinmou/work/test/25.1.9_02/02_bowling_C.mp4 to /home/bylinmou/work/test/cropped_videos/02_bowling_C.mp4 (frames 4-16645)
+  Cropped and saved 16642 data rows (after 7 headers) from /home/bylinmou/work/test/smoothed/02_bowling.csv to /home/bylinmou/work/test/sliced_csvs/02_bowling.csv (rows 7-16648)
+處理行 2:
+  csv_name: 02_candy.csv
+  video_C_name: 02_candy_C.mp4
+  video_L_name: 02_candy_L.mp4
+  start_C: 0, end_C: 14544
+  start_CSV: 12, end_CSV: 14556
+  L_min: 14545
+  video_C 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_candy_C.mp4
+  video_L 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_candy_L.mp4
+  CSV 輸入路徑: /home/bylinmou/work/test/smoothed/02_candy.csv
+  (影片 /home/bylinmou/work/test/25.1.9_02/02_candy_C.mp4 的總幀數: 14563)
+  Cropped and saved 14545 frames from /home/bylinmou/work/test/25.1.9_02/02_candy_C.mp4 to /home/bylinmou/work/test/cropped_videos/02_candy_C.mp4 (frames 0-14544)
+  Cropped and saved 14545 data rows (after 7 headers) from /home/bylinmou/work/test/smoothed/02_candy.csv to /home/bylinmou/work/test/sliced_csvs/02_candy.csv (rows 12-14556)
+處理行 3:
+  csv_name: 02_gallery.csv
+  video_C_name: 02_gallery_C.mp4
+  video_L_name: 02_gallery_L.mp4
+  start_C: 5, end_C: 18599
+  start_CSV: 7, end_CSV: 18601
+  L_min: 18595
+  video_C 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_gallery_C.mp4
+  video_L 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_gallery_L.mp4
+  CSV 輸入路徑: /home/bylinmou/work/test/smoothed/02_gallery.csv
+  (影片 /home/bylinmou/work/test/25.1.9_02/02_gallery_C.mp4 的總幀數: 18602)
+  Cropped and saved 18595 frames from /home/bylinmou/work/test/25.1.9_02/02_gallery_C.mp4 to /home/bylinmou/work/test/cropped_videos/02_gallery_C.mp4 (frames 5-18599)
+  Cropped and saved 18595 data rows (after 7 headers) from /home/bylinmou/work/test/smoothed/02_gallery.csv to /home/bylinmou/work/test/sliced_csvs/02_gallery.csv (rows 7-18601)
+處理行 4:
+  csv_name: 02_museum.csv
+  video_C_name: 02_museum_C.mp4
+  video_L_name: 02_museum_L.mp4
+  start_C: 0, end_C: 24340
+  start_CSV: 16, end_CSV: 24356
+  L_min: 24341
+  video_C 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_museum_C.mp4
+  video_L 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_museum_L.mp4
+  CSV 輸入路徑: /home/bylinmou/work/test/smoothed/02_museum.csv
+  (影片 /home/bylinmou/work/test/25.1.9_02/02_museum_C.mp4 的總幀數: 24359)
+  Cropped and saved 24341 frames from /home/bylinmou/work/test/25.1.9_02/02_museum_C.mp4 to /home/bylinmou/work/test/cropped_videos/02_museum_C.mp4 (frames 0-24340)
+  Cropped and saved 24341 data rows (after 7 headers) from /home/bylinmou/work/test/smoothed/02_museum.csv to /home/bylinmou/work/test/sliced_csvs/02_museum.csv (rows 16-24356)
+處理行 5:
+  csv_name: 02_travel.csv
+  video_C_name: 02_travel_C.mp4
+  video_L_name: 02_travel_L.mp4
+  start_C: 0, end_C: 16458
+  start_CSV: 18, end_CSV: 16476
+  L_min: 16459
+  video_C 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_travel_C.mp4
+  video_L 輸入路徑: /home/bylinmou/work/test/25.1.9_02/02_travel_L.mp4
+  CSV 輸入路徑: /home/bylinmou/work/test/smoothed/02_travel.csv
+  (影片 /home/bylinmou/work/test/25.1.9_02/02_travel_C.mp4 的總幀數: 16476)
+  Cropped and saved 16459 frames from /home/bylinmou/work/test/25.1.9_02/02_travel_C.mp4 to /home/bylinmou/work/test/cropped_videos/02_travel_C.mp4 (frames 0-16458)
+  Cropped and saved 16459 data rows (after 7 headers) from /home/bylinmou/work/test/smoothed/02_travel.csv to /home/bylinmou/work/test/sliced_csvs/02_travel.csv (rows 18-16476)

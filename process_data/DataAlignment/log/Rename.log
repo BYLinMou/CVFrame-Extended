@@ -1,0 +1,123 @@
+(data) bylinmou@DESKTOP-ASETS0R:/mnt/c/Users/Public/Documents/AlignedData$ python rename.py
+==== 文件名檢查與重命名工具 ====
+
+
+請選擇要執行的操作：
+1. 檢查並重命名 videos（videos 子資料夾）
+2. 檢查並重命名 csvs（csvs 子資料夾）
+q. 退出
+請輸入選項（1/2/q）：1
+
+Done checking videos!
+
+請選擇要執行的操作：
+1. 檢查並重命名 videos（videos 子資料夾）
+2. 檢查並重命名 csvs（csvs 子資料夾）
+q. 退出
+請輸入選項（1/2/q）：2
+
+[CSV] 檔案名格式不正確： 04_boss_001.csv
+建議的新檔名： 04_boss.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 04_boss_001.csv 重命名為 04_boss.csv
+
+[CSV] 檔案名格式不正確： 04_candy_001.csv
+建議的新檔名： 04_candy.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 04_candy_001.csv 重命名為 04_candy.csv
+
+[CSV] 檔案名格式不正確： 06_candy_001.csv
+建議的新檔名： 06_candy.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 06_candy_001.csv 重命名為 06_candy.csv
+
+[CSV] 檔案名格式不正確： 06_gallery_001.csv
+建議的新檔名： 06_gallery.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 06_gallery_001.csv 重命名為 06_gallery.csv
+
+[CSV] 檔案名格式不正確： 09_bowling_001.csv
+建議的新檔名： 09_bowling.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 09_bowling_001.csv 重命名為 09_bowling.csv
+
+[CSV] 檔案名格式不正確： 10_gallery_002.csv
+建議的新檔名： 10_gallery.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 10_gallery_002.csv 重命名為 10_gallery.csv
+
+[CSV] 檔案名格式不正確： 12_bowling_001.csv
+建議的新檔名： 12_bowling.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 12_bowling_001.csv 重命名為 12_bowling.csv
+
+[CSV] 檔案名格式不正確： 13_museum_02.csv
+建議的新檔名： 13_museum.csv
+選項：
+1. 使用建議名
+2. 自訂新檔名
+3. 跳過
+請輸入選項（1/2/3）：1
+已將 13_museum_02.csv 重命名為 13_museum.csv
+
+Done checking csvs!
+
+請選擇要執行的操作：
+1. 檢查並重命名 videos（videos 子資料夾）
+2. 檢查並重命名 csvs（csvs 子資料夾）
+q. 退出
+請輸入選項（1/2/q）：2
+
+Done checking csvs!
+
+請選擇要執行的操作：
+1. 檢查並重命名 videos（videos 子資料夾）
+2. 檢查並重命名 csvs（csvs 子資料夾）
+q. 退出
+請輸入選項（1/2/q）：1
+
+Done checking videos!
+
+請選擇要執行的操作：
+1. 檢查並重命名 videos（videos 子資料夾）
+2. 檢查並重命名 csvs（csvs 子資料夾）
+q. 退出
+請輸入選項（1/2/q）：2
+
+Done checking csvs!
+
+請選擇要執行的操作：
+1. 檢查並重命名 videos（videos 子資料夾）
+2. 檢查並重命名 csvs（csvs 子資料夾）
+q. 退出
+請輸入選項（1/2/q）：q
+
+退出程式。
