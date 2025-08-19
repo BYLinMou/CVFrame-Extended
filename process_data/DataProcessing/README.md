@@ -1,20 +1,20 @@
-Features：
+Features：\
 
-Keypoint Extraction
-Extract 17 or 24 keypoints (custom order) from Perception-Neuron CSVs.
-Support for both robust header parsing and marker averaging.
+Keypoint Extraction\
+Extract 17 or 24 keypoints (custom order) from Perception-Neuron CSVs.\
+Support for both robust header parsing and marker averaging.\
 
-CSV & Video Slicing
-Slice both CSV and video files into segments per action/repetition, based on annotation Excel files.
-Outputs are organized for downstream analysis.
+CSV & Video Slicing\
+Slice both CSV and video files into segments per action/repetition, based on annotation Excel files.\
+Outputs are organized for downstream analysis.\
 
-Preview Generation
-Overlay projected 3D keypoints onto video clips for quick quality checks.
+Preview Generation\
+Overlay projected 3D keypoints onto video clips for quick quality checks.\
 
-Batch Processing & Synchronization
-Utilities for file presence checking, batch processing, and synchronization across modalities.
+Batch Processing & Synchronization\
+Utilities for file presence checking, batch processing, and synchronization across modalities.\
 
-Usage
+Usage\
 
 1. Keypoint Extraction
 ```bash
@@ -56,21 +56,21 @@ python sync_all_video.py
 Checks file presence and can batch-generate processed CSVs for all videos defined in an Excel sheet.
 ```
 
-Notes
-Environment:
+Notes\
+Environment:\
 Scripts require Python 3.7+ and packages: pandas, numpy, opencv-python, matplotlib, tqdm, etc.
 
-File Paths:
+File Paths:\
 Please update file and folder paths in each script as needed to match your local directory structure and data locations.
 
-Camera Parameters:
+Camera Parameters:\
 Place JSON files with camera intrinsics/extrinsics under Projection/CVFrame-main/data/.
 
-Authors & Contact
+Authors & Contact\
 Maintained by the CVRA research team.
 
 For issues or questions, please open an issue or contact the repo maintainer.
 
-License
-This project is intended for academic/research use.
+License\
+This project is intended for academic/research use.\
 Please contact the authors for commercial licensing.
