@@ -1,18 +1,18 @@
-Features：\
+Features：
 
 Keypoint Extraction\
 Extract 17 or 24 keypoints (custom order) from Perception-Neuron CSVs.\
-Support for both robust header parsing and marker averaging.\
+Support for both robust header parsing and marker averaging.
 
 CSV & Video Slicing\
 Slice both CSV and video files into segments per action/repetition, based on annotation Excel files.\
-Outputs are organized for downstream analysis.\
+Outputs are organized for downstream analysis.
 
 Preview Generation\
-Overlay projected 3D keypoints onto video clips for quick quality checks.\
+Overlay projected 3D keypoints onto video clips for quick quality checks.
 
 Batch Processing & Synchronization\
-Utilities for file presence checking, batch processing, and synchronization across modalities.\
+Utilities for file presence checking, batch processing, and synchronization across modalities.
 
 Usage\
 
