@@ -69,7 +69,7 @@ This Python application provides a graphical interface for **video frame annotat
 
 ## Running the Application
 
-### 1. 3D Projection/Overlay Tool
+### 1. 3D Points Projection/Overlay Tool
 
 ```bash
 python main.py

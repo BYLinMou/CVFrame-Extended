@@ -8,6 +8,8 @@ from PyQt5.QtGui import QImage, QPixmap, QIcon
 from video_player import VideoPlayer
 import os
 
+import sys
+from PyQt5.QtWidgets import QApplication
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -388,3 +390,9 @@ class VideoListWidget(QListWidget):
     def keyPressEvent(self, event):           
         # 将事件传递给父窗口
         self.parent_window.keyPressEvent(event)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
