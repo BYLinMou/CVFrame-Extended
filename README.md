@@ -31,7 +31,7 @@ This Python application provides a graphical interface for **video frame annotat
   - Supports batch loading of folders with 3D data.
 
 - **Visualization**
-  - 3D mocap scatter plot using matplotlib (with zoom).
+  - 3D mocap scatter plot using matplotlib (Raw Mocap dataset only).
   - Panels are dockable/closable for a flexible workspace.
 
 ---
@@ -39,17 +39,18 @@ This Python application provides a graphical interface for **video frame annotat
 ## Folder Structure
 
 .
-├── data/
-│ ├── intrinsic_middle.json # Example camera intrinsic parameters
-│ ├── extrinsics_middle.json # Example camera extrinsic parameters
-│ └── ...
-├── main.py # Entry point for the application
-├── main_window.py # Main video labeler window (video playback/labeling)
-├── projection_window3.py # Main 3D visualization & projection window
-├── video_player.py # Video file player backend
-├── video_player_black.py # Virtual black video generator (for 3D-only sessions)
-├── pixel_data.py # 2D pixel data loader and dialog
-└── mocap_data.py # Raw mocap data loader and handler
+├── data/ 
+│ ├── intrinsic_middle.json # Example camera intrinsic parameters 
+│ ├── extrinsics_middle.json # Example camera extrinsic parameters 
+│ └── ... 
+├── main.py # Entry point for the application 
+├── main_window.py # Main video labeler window (video playback/labeling) 
+├── projection_window3.py # Main 3D visualization & projection window 
+├── video_player.py # Video file player backend 
+├── video_player_black.py # Virtual black video generator (for 3D-only sessions) 
+├── pixel_data.py # 2D pixel data loader and dialog 
+└── mocap_data.py # Raw mocap data loader and handler 
+
 ---
 
 ## Installation
@@ -68,20 +69,19 @@ This Python application provides a graphical interface for **video frame annotat
 
 ## Running the Application
 
-### 1. Main Video Labeler
+### 1. 3D Projection/Overlay Tool
 
 ```bash
 python main.py
 ```
-(Opens the video frame labeler with menu options to open videos/folders and access 3D projection.)
-(i.e. Opens projection_window3.py)
+(Opens the main window for 3D/2D data overlay, mocap review, and export tools.)
 
-### 2. 3D Projection/Overlay Tool (standalone)
+### 2. Main Video Labeler (standalone)
 
 ```bash
-python projection_window3.py
+python main_window.py
 ```
-(Opens the main window for 3D/2D data overlay, mocap review, and export tools.)
+(Opens the video frame labeler with menu options to open videos/folders and access 3D projection.) 
 
 ---
 

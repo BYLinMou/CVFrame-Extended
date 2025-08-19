@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
                             QPushButton, QSlider, QLabel, QFileDialog, 
                             QListWidget, QSplitter, QAbstractItemView, QSizePolicy,
                             QInputDialog, QMessageBox)
-from projection_window import ProjectionWindow  # added import
+from projection_window3 import ProjectionWindow3  # added import
 from PyQt5.QtCore import Qt, QTimer, QDir
 from PyQt5.QtGui import QImage, QPixmap, QIcon
 from video_player import VideoPlayer
@@ -173,7 +173,7 @@ class MainWindow(QMainWindow):
             
     def open_projection_window(self):
         """打开投影窗口"""
-        self.proj_window = ProjectionWindow()
+        self.proj_window = ProjectionWindow3()
         self.proj_window.show()
     
     def toggle_play(self):
