@@ -38,7 +38,8 @@ Checks and standardizes the naming format of all files according to predefined r
 ## File/Folder Structure
 
 ```plaintext
-.
+project_root/
+│
 ├── AlignmentReport.py
 ├── Alignment.py
 ├── Pairing.py
