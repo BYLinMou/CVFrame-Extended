@@ -14,7 +14,7 @@ Overlay projected 3D keypoints onto video clips for quick quality checks.
 Batch Processing & Synchronization\
 Utilities for file presence checking, batch processing, and synchronization across modalities.
 
-Usage\
+Usage
 
 1. Keypoint Extraction
 ```bash
