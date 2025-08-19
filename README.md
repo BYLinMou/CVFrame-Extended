@@ -116,7 +116,7 @@ python main_window.py
 ## Data Format Notes
 
 - **3D Data**: `.npy` or `.csv` files with shape [frames, joints, 3] or [frames, joints*3] (xyz order).
-- **Raw Mocap**: CSV with multi-row headers and "Position" columns, as exported from Vicon/Nexus.
+- **Raw Mocap**: CSV with multi-row headers and "Position" columns.
 - **Pixel2D**: `.npy` or `.csv` with [frames, joints, 3] (xyz or xy1).
 
 ---
