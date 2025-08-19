@@ -38,6 +38,7 @@ This Python application provides a graphical interface for **video frame annotat
 
 ## Folder Structure
 
+```
 .
 ├── data/ 
 │ ├── intrinsic_middle.json # Example camera intrinsic parameters 
@@ -50,7 +51,7 @@ This Python application provides a graphical interface for **video frame annotat
 ├── video_player_black.py # Virtual black video generator (for 3D-only sessions) 
 ├── pixel_data.py # 2D pixel data loader and dialog 
 └── mocap_data.py # Raw mocap data loader and handler 
-
+```
 ---
 
 ## Installation
@@ -81,7 +82,7 @@ python main.py
 ```bash
 python main_window.py
 ```
-(Opens the video frame labeler with menu options to open videos/folders and access 3D projection.) 
+(Opens the video frame labeler with menu options to open videos/folders, and access 3D projection window.) 
 
 ---
 
