@@ -1,7 +1,7 @@
 Features：
 
 Keypoint Extraction\
-Extract 17 or 24 keypoints (custom order) from Perception-Neuron CSVs.\
+Extract 17 or 24 keypoints (custom order) from CSVs.\
 Support for both robust header parsing and marker averaging.
 
 CSV & Video Slicing\
@@ -19,42 +19,41 @@ Usage
 1. Keypoint Extraction
 ```bash
 python extract_17_keypoint_from_csv.py --video_code 04
+```
 Input: ./data/csv/04/*.csv
 Output: ./data/extracted_csv/04_17kp/*.csv
-Extract 24 keypoints (untested version):
-```
 ```bash
 python extract_24_keypoint_from_csv_NotTest.py --video_code 04
+```
 Input: ./data/csv/04/*.csv
 Output: ./data/extracted_csv/04/*.csv
-```
 
 2. CSV Slicing
 ```bash
 python slice_csv_ver2.py --video_code 04
+```
 Slices extracted CSVs into action/repetition clips based on offset Excel.
 Output: ./data/output/slice_csv04/CSV_*/*.csv
-```
 
 3. Video Slicing
 Edit slice_video.py for video_code and run:
 ```bash
 python slice_video.py
-Slices videos according to repetition/action, matching the CSVs.
 ```
+Slices videos according to repetition/action, matching the CSVs.
 
 4. Preview Slicing
 ```bash
 python preview_slicing.py --video_code 04 --game museum --perspective C
+```
 Overlays 3D keypoints onto each video slice for visual verification.
 Output: ./data/output/previews/04_museum_C/*.mp4
-```
 
 5. Batch Sync & Processing
 ```bash
 python sync_all_video.py
-Checks file presence and can batch-generate processed CSVs for all videos defined in an Excel sheet.
 ```
+Checks file presence and can batch-generate processed CSVs for all videos defined in an Excel sheet.
 
 Notes\
 Environment:\
