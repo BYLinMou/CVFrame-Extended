@@ -94,19 +94,5 @@ Update file and folder paths in each script to match your local directory struct
 
 Place JSON files with camera intrinsics/extrinsics under:
 ```
-Projection/CVFrame-main/data/
+CVFrame-Extended/data/
 ```
-
----
-
-# Authors & Contact
-
-Maintained by the CVRA research team.  
-For issues or questions, please open a GitHub issue or contact the repo maintainer.
-
----
-
-# License
-
-This project is intended for academic/research use.  
-For commercial licensing, please contact the authors.
