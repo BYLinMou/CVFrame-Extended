@@ -35,6 +35,23 @@ Checks and standardizes the naming format of all files according to predefined r
 
 ---
 
+## File/Folder Structure
+
+```plaintext
+project_root/
+│
+├── AlignmentReport.py
+├── Alignment.py
+├── Pairing.py
+├── Merge_group_video.py
+├── Merge_group_csv.py
+├── Rename.py
+├── requirements.txt
+└── summary.xlsx
+```
+
+---
+
 ## Usage
 
 ### Generate Summary
@@ -79,22 +96,6 @@ Standardizes file naming formats.
 
 ---
 
-## File/Folder Structure
-
-```plaintext
-project_root/
-│
-├── AlignmentReport.py
-├── Alignment.py
-├── Pairing.py
-├── Merge_group_video.py
-├── Merge_group_csv.py
-├── Rename.py
-├── requirements.txt
-└── summary.xlsx
-```
-
----
 
 ## Notes
 
