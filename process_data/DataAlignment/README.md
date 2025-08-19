@@ -38,14 +38,13 @@ Checks and standardizes the naming format of all files according to predefined r
 ## File/Folder Structure
 
 ```plaintext
-.
+./code
 ├── AlignmentReport.py
 ├── Alignment.py
 ├── Pairing.py
 ├── Merge_group_video.py
 ├── Merge_group_csv.py
 ├── Rename.py
-├── summary.xlsx
 └── ...
 ```
 
